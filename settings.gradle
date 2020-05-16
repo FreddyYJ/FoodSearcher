@@ -1,0 +1,2 @@
+rootProject.name='FoodSearcher'
+include ':app'
