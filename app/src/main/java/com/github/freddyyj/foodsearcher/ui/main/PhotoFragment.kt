@@ -15,6 +15,8 @@ import com.github.freddyyj.foodsearcher.R
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.text.FirebaseVisionCloudTextRecognizerOptions
+import kotlinx.android.synthetic.main.fragment_photo.*
+import kotlinx.android.synthetic.main.fragment_result.*
 
 /**
  * A simple [Fragment] subclass.
@@ -37,6 +39,13 @@ class PhotoFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_photo, container, false)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        takePhotoAgain.setOnClickListener {
+            dispatchTakePictureIntent()
+        }
     }
 
     private fun dispatchTakePictureIntent() {
@@ -62,8 +71,7 @@ class PhotoFragment : Fragment() {
                 .addOnSuccessListener { firebaseVisionText ->
                     // Task completed successfully
                     viewModel.recognizedText = firebaseVisionText.text
-                    val result=fragmentManager!!.findFragmentById(R.id.fragment_result) as ResultFragment
-                    result.updateResult()
+                    resultText.text=viewModel.recognizedText
                 }
                 .addOnFailureListener { e ->
                     // Task failed with an exception

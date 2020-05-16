@@ -31,9 +31,6 @@ class ResultFragment : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_result, container, false)
     }
-    fun updateResult(){
-        resultText.text=viewModel.recognizedText
-    }
 
     companion object {
         /**
