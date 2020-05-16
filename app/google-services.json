@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "895383664908",
+    "firebase_url": "https://foodsearcher-1e35d.firebaseio.com",
+    "project_id": "foodsearcher-1e35d",
+    "storage_bucket": "foodsearcher-1e35d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:895383664908:android:9afd4fc856ccec0d98f129",
+        "android_client_info": {
+          "package_name": "com.github.freddyyj.foodsearcher"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "895383664908-q974ii4kh0v8a2qq1uo4q7gd21hq7cor.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhgbeZAJo8z1S2HkR3Znhm_sUbwrIxucI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "895383664908-q974ii4kh0v8a2qq1uo4q7gd21hq7cor.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
