@@ -9,7 +9,5 @@ import androidx.lifecycle.ViewModelProvider
 class PageViewModel : ViewModel() {
 
     var recognizedText:String=""
-    fun setText(text: String) {
-        this.recognizedText = text
-    }
+    var translatedText:String=""
 }

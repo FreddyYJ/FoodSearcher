@@ -4,19 +4,21 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-
 import com.github.freddyyj.foodsearcher.R
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
-import com.google.firebase.ml.vision.text.FirebaseVisionCloudTextRecognizerOptions
 import kotlinx.android.synthetic.main.fragment_photo.*
-import kotlinx.android.synthetic.main.fragment_result.*
 
 /**
  * A simple [Fragment] subclass.
@@ -26,6 +28,7 @@ import kotlinx.android.synthetic.main.fragment_result.*
 class PhotoFragment : Fragment() {
     val REQUEST_IMAGE_CAPTURE = 1
     lateinit var viewModel: PageViewModel
+    lateinit var database: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +49,7 @@ class PhotoFragment : Fragment() {
         takePhotoAgain.setOnClickListener {
             dispatchTakePictureIntent()
         }
+        database = FirebaseFirestore.getInstance()
     }
 
     private fun dispatchTakePictureIntent() {
@@ -72,11 +76,43 @@ class PhotoFragment : Fragment() {
                     // Task completed successfully
                     viewModel.recognizedText = firebaseVisionText.text
                     resultText.text=viewModel.recognizedText
+                    requestTranslation(viewModel.recognizedText)
                 }
                 .addOnFailureListener { e ->
                     // Task failed with an exception
                     // ...
                 }
+        }
+    }
+    private var isChanged=0
+    fun requestTranslation(text: String){
+        Log.i("Translation","translation started")
+        val user: HashMap<String, Any> = HashMap()
+        user.put("input",text)
+        val document=database.collection("translations").document("translations")
+
+        document.update(user)
+        document.addSnapshotListener { snapshot, e ->
+            if (e != null) {
+                Log.w("Translation", "Listen failed.", e)
+                return@addSnapshotListener
+            }
+
+            if (snapshot != null && snapshot.exists()) {
+                if (isChanged==1){
+                    Log.d("translation", "Current data: ${snapshot.data?.getValue("translated")}")
+                    val result= snapshot.data?.getValue("translated") as Map<*, *>
+                    Log.d("translation",result.get("ko") as String)
+                    translatedResult.text=result.get("ko") as String
+                    viewModel.translatedText=result.get("ko") as String
+                    isChanged=0
+                }
+                else{
+                    isChanged=1
+                }
+            } else {
+                Log.d("translation", "Current data: null")
+            }
         }
     }
 
